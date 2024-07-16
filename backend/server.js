@@ -19,6 +19,11 @@ connection.once('open', () => {
 });
 
 // Define routes here
+const authRouter = require('./routes/authentication');
+const transcriptRouter = require('./routes/transcripts');
+
+app.use('/api/auth', authRouter);
+app.use('/transcripts', transcriptRouter);
 
 // End of routes
 
