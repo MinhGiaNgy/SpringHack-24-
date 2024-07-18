@@ -21,9 +21,11 @@ connection.once('open', () => {
 // Define routes here
 const authRouter = require('./routes/authentication');
 const transcriptRouter = require('./routes/transcripts');
+const openaiRouter = require('./routes/generation');
 
+app.use('/api/openai', openaiRouter);
 app.use('/api/auth', authRouter);
-app.use('/transcripts', transcriptRouter);
+app.use('/api/transcripts', transcriptRouter);
 
 // End of routes
 
