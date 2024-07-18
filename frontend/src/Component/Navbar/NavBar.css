@@ -1,0 +1,95 @@
+/* Main theme color */
+:root {
+    --theme-color: #F78888;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--theme-color);
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-name p {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .nav-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .nav-menu li {
+    margin: 0 15px;
+    position: relative;
+  }
+  
+  .nav-menu li a {
+    color: white;
+    font-size: 1em;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-menu li a:hover {
+    color: #ffffffb3; /* slightly lighter on hover */
+  }
+  
+  .nav-menu li hr {
+    border: 0;
+    height: 2px;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    bottom: -5px;
+  }
+  
+  .account button {
+    background-color: white;
+    color: var(--theme-color);
+    border: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .account button:hover {
+    background-color: #f2f2f2;
+  }
+  
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .nav-menu {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .nav-menu li {
+      width: 100%;
+      text-align: left;
+      margin: 5px 0;
+    }
+  
+    .account {
+      width: 100%;
+      text-align: left;
+      margin-top: 10px;
+    }
+  }
+  
