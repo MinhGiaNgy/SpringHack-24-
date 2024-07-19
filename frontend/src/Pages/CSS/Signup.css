@@ -1,11 +1,11 @@
-.login-container {
+.signup-container {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh; 
   }
   
-  .login-left {
+  .signup-left {
     text-align: center;
     flex: 1;
     display: flex;
@@ -13,17 +13,17 @@
   }
 
   
-  .login-left h2 {
+  .signup-left h2 {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 20px;
   }
   
-  .login-left p {
+  .signup-left p {
     font-size: 1rem;
   }
   
-  .login-right {
+  .signup-right {
     color: #fff;
     padding: 40px;
     border-radius: 8px;
@@ -34,14 +34,14 @@
     align-items: center;
   }
   
-  .login-right h1 {
+  .signup-right h1 {
     font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 20px;
     color: #f7888f;
   }
   
-  .login-info input {
+  .signup-info input {
     width: 80%;
     padding: 12px;
     margin-bottom: 15px;
@@ -50,11 +50,11 @@
     font-size: 15px;
   }
   
-  .login-info input:focus {
+  .signup-info input:focus {
     outline: none;
   }
   
-  .login-right button {
+  .signup-right button {
     padding: 12px;
     border: none;
     border-radius: 4px;
@@ -65,10 +65,10 @@
     font-size: 20px;
   }
   
-  .login-right button:hover {
+  .signup-right button:hover {
     opacity: 0.9;
   }
-  .login-signup {
+  .signup-login {
     color: #f7888f;
   }
   

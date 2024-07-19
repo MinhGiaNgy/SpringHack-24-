@@ -55,7 +55,7 @@
     bottom: -5px;
   }
   
-  .account button {
+  .login button {
     background-color: white;
     color: var(--theme-color);
     border: none;
@@ -65,7 +65,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
-  .account button:hover {
+  .login button:hover {
     background-color: #f2f2f2;
   }
   
@@ -86,7 +86,7 @@
       margin: 5px 0;
     }
   
-    .account {
+    .login {
       width: 100%;
       text-align: left;
       margin-top: 10px;

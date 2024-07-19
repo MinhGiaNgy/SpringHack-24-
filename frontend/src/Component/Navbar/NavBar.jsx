@@ -18,8 +18,8 @@ export default function Navbar() {
             <li onClick={()=>{setMenu("files")}}><Link style={{textDecoration: 'none'}} to='/files'>Files{menu==="files" ? <hr/> : <></>}</Link></li>
         </ul>
 
-        <div className='account'>
-            <Link to='/account'><button>Account</button></Link>
+        <div className='login'>
+            <Link to='/login'><button>Log In</button></Link>
         </div>
 
     </div>
