@@ -1,0 +1,10 @@
+#upload-btn {
+    background-color: #f78888;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+#upload-btn:hover {
+    background-color: #e07777;
+}
