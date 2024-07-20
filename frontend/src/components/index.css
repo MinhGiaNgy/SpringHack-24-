@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    font-family: 'Poppins';
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: auto;
+    background: linear-gradient(315deg, white 10%, #F78888 40%, #F3D250 70%, #90CCF4 90%);
+    animation: gradient 15s ease infinite;
+    background-size: 400% 400%;
+    background-attachment: fixed;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.App {
+    text-align: center;
+    min-height: 100vh; /* Ensure the app covers full height */
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: rgba(255, 204, 204, 0.9); /* Slightly transparent background */
+}
+
+.navbar-links a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    position: relative; /* Needed for the underline effect */
+}
+
+.navbar-links a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: #333;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+
+.navbar-links a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.login-button {
+    padding: 10px 20px;
+    background-color: #ff6666;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+.login-button:hover {
+    transform: translateY(-3px); /* Slight move effect on hover */
+}
+
+/* Features section styling */
+.features {
+    padding: 50px;
+    background: transparent; /* Ensure background gradient does not overlap */
+}
+
+.features h2 {
+    margin-bottom: 30px;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.feature {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #ffe6e6;
+}
