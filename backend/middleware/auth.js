@@ -4,7 +4,7 @@ const User = require('../models/user.model'); // Adjust the path
 require('dotenv').config();
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
+  const token = req.header('Authorization')?.replace('Bearer ', '');
   if (!token) return res.status(401).json({ error: 'No token, authorization denied' });
 
   try {

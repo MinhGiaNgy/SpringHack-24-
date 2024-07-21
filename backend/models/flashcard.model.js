@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 const mongoose = require('mongoose');
+const Card = require('./card.model');
 
 const flashcardSchema = new mongoose.Schema({
     term: {
@@ -9,11 +9,10 @@ const flashcardSchema = new mongoose.Schema({
     definition: {
         type: String,
         required: [true, 'Definition is required.']
-    },
-    createdAt: {
-        type: Date,
-        default: [Date.now, 'Creation Date is required.']
-    },
+    }
+}, {
+    timestamps: true
 });
 
-const Flashcard = mongoose.model('Flashcard', flashcardSchema);
+const Flashcard = Card.discriminator('Flashcard', flashcardSchema);
+module.exports = Flashcard;

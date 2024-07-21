@@ -13,7 +13,7 @@ router.post('/', authMiddleware, async (req, res) => {
     }
     const newDeck = new Deck({
       name,
-      createdBy: req.user.id 
+      user: req.user.id 
     });
     const savedDeck = await newDeck.save();
     res.status(201).json(savedDeck);
@@ -26,7 +26,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const decks = await Deck.find({ createdBy: req.user.id });
+    const decks = await Deck.find({ user: req.user.id });
     res.status(200).json({
       count: decks.length,
       data: decks,
@@ -43,7 +43,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const deck = await Deck.findById(id);
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
-    if (deck.createdBy.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
+    if (deck.user.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
     res.status(200).json(deck);
   } catch (error) {
     console.log(error.message);
@@ -63,7 +63,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const deck = await Deck.findById(id);
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
-    if (deck.createdBy.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
+    if (deck.user.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
 
     deck.name = name;
     const updatedDeck = await deck.save();
@@ -80,7 +80,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const deck = await Deck.findById(id);
     if (!deck) return res.status(404).json({ message: 'Deck not found' });
-    if (deck.createdBy.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
+    if (deck.user.toString() !== req.user.id) return res.status(403).json({ message: 'Unauthorized' });
 
     await deck.remove();
     res.status(200).send({ message: 'Deck deleted successfully' });

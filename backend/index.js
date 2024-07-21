@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const deckRouter = require('./routes/deckrouter');
+const cardRouter = require('./routes/cards')
 const multicardRouter = require('./routes/MultichoiceRouter'); 
 const flashcardRouter = require('./routes/Flashcardrouter'); 
 const authRouter = require('./routes/authentication'); 
@@ -19,6 +20,7 @@ const port = process.env.PORT;
 const uri = process.env.ATLAS_URI;
 
 app.use('/api/decks', authMiddleware, deckRouter);
+app.use('/api/cards', authMiddleware, cardRouter);
 app.use('/api/multicards', authMiddleware, multicardRouter); 
 app.use('/api/flashcards', authMiddleware, flashcardRouter); 
 app.use('/api/auth', authRouter); 
@@ -27,7 +29,7 @@ app.use('/api/transcripts', authMiddleware, transcriptRouter);
 app.use('/api/generation', authMiddleware, generation);
 
 mongoose
-    .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(uri, { })
     .then(() => {
         console.log('Connected to MongoDB');
         app.listen(port, () => {
