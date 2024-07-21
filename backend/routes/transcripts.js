@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Transcript = require('../models/transcript.model'); // Adjust path as needed
-const authMiddleware = require('../middleware/auth'); // Assuming you have authentication middleware
+const Transcript = require('../models/transcript.model');
 
 // @route   POST api/transcripts
 // @desc    Create a new transcript
 // @access  Private
-router.post('/', authMiddleware, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { title, content, summary } = req.body;
     const newTranscript = new Transcript({
       title,
       content,
       summary,
-      user: req.user.id // Assuming user ID is added by auth middleware
+      user: req.user.id
     });
     const savedTranscript = await newTranscript.save();
     res.status(201).json(savedTranscript);
@@ -25,7 +24,7 @@ router.post('/', authMiddleware, async (req, res) => {
 // @route   GET api/transcripts
 // @desc    Get all transcripts
 // @access  Private
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const transcripts = await Transcript.find({ user: req.user.id });
     res.json(transcripts);
@@ -37,7 +36,7 @@ router.get('/', authMiddleware, async (req, res) => {
 // @route   GET api/transcripts/:id
 // @desc    Get a single transcript by ID
 // @access  Private
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const transcript = await Transcript.findById(req.params.id);
     if (!transcript) return res.status(404).json({ error: 'Transcript not found' });
@@ -51,7 +50,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 // @route   PUT api/transcripts/:id
 // @desc    Update a transcript by ID
 // @access  Private
-router.put('/:id', authMiddleware, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { title, content, summary } = req.body;
     const transcript = await Transcript.findById(req.params.id);
@@ -72,7 +71,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 // @route   DELETE api/transcripts/:id
 // @desc    Delete a transcript by ID
 // @access  Private
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const transcript = await Transcript.findById(req.params.id);
     if (!transcript) return res.status(404).json({ error: 'Transcript not found' });

@@ -6,8 +6,6 @@ const multer = require('multer');
 const fs = require('fs');
 const FormData = require('form-data');
 
-const authMiddleware = require('../middleware/auth')
-
 require('dotenv').config();
 
 // @route   POST /api/openai/summarize
