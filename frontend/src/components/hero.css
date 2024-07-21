@@ -1,0 +1,48 @@
+.hero {
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.hero .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 900px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.hero .btn-primary {
+    background: #ff6666; /* Pink color */
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 2rem;
+    font-weight: 600;
+    border-radius: 50px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadow */
+}
+
+.hero .btn-primary:hover {
+    background: #e5533d; /* Darker pink color on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}

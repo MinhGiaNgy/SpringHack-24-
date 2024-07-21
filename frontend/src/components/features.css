@@ -1,0 +1,36 @@
+.features {
+    padding: 50px;
+    background: transparent; /* Ensure background gradient does not overlap */
+}
+
+.features h2 {
+    margin-bottom: 30px;
+    font-size: 2.5rem; /* Increase heading size */
+}
+
+.feature-list {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.feature {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #ffe6e6;
+    transition: transform 0.3s ease; /* Add transition for hover effect */
+}
+
+.feature:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}
+
+.features .feature-container {
+    margin-bottom: 100px; /* Add space below the feature boxes */
+}
