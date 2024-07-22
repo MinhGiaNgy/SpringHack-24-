@@ -77,7 +77,7 @@ router.delete('/:id', async (req, res) => {
     if (!transcript) return res.status(404).json({ error: 'Transcript not found' });
     if (transcript.user.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
 
-    await transcript.remove();
+    await Transcript.deleteOne({ _id: req.params.id });
     res.json({ message: 'Transcript deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
