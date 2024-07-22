@@ -64,7 +64,7 @@ A teaching app built using MERNstack
      npm start
      ```
 
-5. **Access the application**
+5. **API Documentation**
    - Frontend APIs
    - For decks: ('./routes/deckrouter');
    - For cards: ('./routes/cards')
@@ -73,8 +73,9 @@ A teaching app built using MERNstack
    - For Auth: ('./routes/authentication'); 
    - For Transcripts: ('./routes/transcripts'); 
    - For generation: ('./routes/generation');
-
-   Open your browser and go to `http://localhost:5000` to see the application in action.
+  
+6. **Access the application**
+   Open your browser and go to http://localhost:5000 to see the application in action.
 
 ## Folder Structure
 
