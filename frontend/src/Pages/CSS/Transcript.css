@@ -8,3 +8,23 @@
 #upload-btn:hover {
     background-color: #e07777;
 }
+
+.transcript-item {
+    display: flex;
+    flex-direction: column;
+    max-height: 200px; /* Adjust this height as needed */
+    overflow: hidden;
+  }
+  
+  .transcript-item h2 {
+    flex-shrink: 0;
+  }
+  
+  .transcript-item p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Number of lines to show */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0; /* Ensure no extra margin at the bottom */
+  }
