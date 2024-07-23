@@ -7,22 +7,43 @@ const Signup = () => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user');
+  const [role, setRole] = useState('USER'); // Assuming default role is USER
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      firstName,
-      lastName,
-      email,
-      password,
-      role
-    });
-    // Reset the form fields after submission
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPassword('');
+
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          username: email, // Assuming username is the same as email for simplicity
+          password,
+          role,
+          firstName,
+          lastName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Signup failed');
+      }
+
+      const data = await response.json();
+      console.log('Signup successful:', data);
+
+      // Reset the form fields after successful signup
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPassword('');
+    } catch (error) {
+      console.error('Signup error:', error.message);
+      // Handle error state or display error to user
+    }
   };
 
   return (
@@ -73,7 +94,6 @@ const Signup = () => {
                     required
                   />
                 </FormGroup>
-                <Input type="hidden" name="role" value={role} />
                 <Button type="submit" color="primary" block>Sign Up</Button>
               </Form>
             </div>

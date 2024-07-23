@@ -1,20 +1,38 @@
 import React, { useState } from 'react';
 import './CSS/Login.css'; 
 
-export default function Login() {
+const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    console.log({
-      email,
-      password
-    });
-    
-    setEmail('');
-    setPassword('');
+    try {
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      console.log('Login successful:', data);
+
+      // Reset the form fields after successful login
+      setEmail('');
+      setPassword('');
+      setError(null); // Clear any previous errors
+    } catch (error) {
+      console.error('Login error:', error.message);
+      setError('Login failed. Please check your email and password.');
+    }
   };
 
   return (
@@ -46,6 +64,7 @@ export default function Login() {
                 required
               />
             </div>
+            {error && <div className="alert alert-danger" role="alert">{error}</div>}
             <button type='submit' className='btn btn-primary w-100'>Log In</button>
           </form>
         </div>
@@ -53,3 +72,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default Login;

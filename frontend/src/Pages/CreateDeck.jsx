@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import FlashcardDeck from '../Component/FlashcardDeck/FlashcardDeck';
-import { Button, Container, Row, Col, Input } from 'reactstrap';
-import './CSS/CreateDeck.css'; // Import your CSS file
+import { Button, Container, Input, FormGroup, Form, Label } from 'reactstrap';
+import './CSS/CreateDeck.css';
 
 const CreateDeck = () => {
   const [deckName, setDeckName] = useState('');
@@ -15,22 +15,67 @@ const CreateDeck = () => {
     setDeckName(event.target.value);
   };
 
-  const handleSaveDeck = () => {
-    // Handle saving deck to database or local storage
-    console.log('Saving deck:', deckName, flashcards);
+  const handleSaveDeck = async () => {
+    try {
+      const response = await fetch('/api/decks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: deckName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create deck');
+      }
+
+      console.log('Deck created successfully:', deckName);
+      // Optionally, reset form fields or handle UI state
+    } catch (error) {
+      console.error('Error creating deck:', error);
+      // Handle error (e.g., show error message to user)
+    }
   };
 
   const handleUploadFile = () => {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Handle file upload logic here, e.g., upload to server, process, etc.
-      console.log('Uploaded file:', file);
-      // You can also set the file state if needed
-      // setUploadedFile(file);
+      try {
+        // Simulating file upload to backend
+        console.log('Uploading file:', file.name);
+        
+        // Assuming you send the file to the backend and receive response to generate flashcards
+        const response = await fetch('/api/generation/make-flashcard', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            num: 10, // Example number of flashcards to generate
+            prompt: file.name, // Example prompt based on file name
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to generate flashcards');
+        }
+
+        const data = await response.json();
+        console.log('Generated flashcards:', data);
+
+        // Set generated flashcards in state
+        setFlashcards(data.flashcards);
+
+      } catch (error) {
+        console.error('Error generating flashcards:', error);
+        // Handle error (e.g., show error message to user)
+      }
     }
   };
 
