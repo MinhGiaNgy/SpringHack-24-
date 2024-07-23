@@ -52,7 +52,7 @@
   .navigation-arrows {
     display: flex;
     justify-content: space-between;
-    width: 40%;
+    width: 50%;
     height: 100%;
     margin-top: 20%;
   }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
 import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap';
 import './CSS/Signup.css';
 
@@ -8,41 +9,32 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('USER'); // Assuming default role is USER
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          username: email, // Assuming username is the same as email for simplicity
-          password,
-          role,
-          firstName,
-          lastName,
-        }),
+      const response = await axios.post('/api/auth/signup', {
+        email,
+        username: email, // Assuming username is the same as email for simplicity
+        password,
+        role,
+        firstName,
+        lastName,
       });
 
-      if (!response.ok) {
-        throw new Error('Signup failed');
-      }
-
-      const data = await response.json();
-      console.log('Signup successful:', data);
+      console.log('Signup successful:', response.data);
 
       // Reset the form fields after successful signup
       setFirstName('');
       setLastName('');
       setEmail('');
       setPassword('');
+      setError(null); // Clear any previous errors
     } catch (error) {
       console.error('Signup error:', error.message);
-      // Handle error state or display error to user
+      setError('Signup failed. Please check your details and try again.');
     }
   };
 
@@ -94,6 +86,7 @@ const Signup = () => {
                     required
                   />
                 </FormGroup>
+                {error && <div className="alert alert-danger" role="alert">{error}</div>}
                 <Button type="submit" color="primary" block>Sign Up</Button>
               </Form>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
 import './CSS/Login.css'; 
 
 const Login = () => {
@@ -10,25 +11,19 @@ const Login = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await axios.post('/api/auth/signin', { email, password });
 
-      if (!response.ok) {
+      // Check for successful response
+      if (response.status === 200) {
+        console.log('Login successful:', response.data);
+
+        // Reset the form fields after successful login
+        setEmail('');
+        setPassword('');
+        setError(null); // Clear any previous errors
+      } else {
         throw new Error('Login failed');
       }
-
-      const data = await response.json();
-      console.log('Login successful:', data);
-
-      // Reset the form fields after successful login
-      setEmail('');
-      setPassword('');
-      setError(null); // Clear any previous errors
     } catch (error) {
       console.error('Login error:', error.message);
       setError('Login failed. Please check your email and password.');
