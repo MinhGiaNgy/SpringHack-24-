@@ -12,7 +12,7 @@ require('dotenv').config();
 // @desc    Summarize lessons using OpenAI API
 // @access  Private
 router.post('/summarize', async (req, res) => {
-    const template = "You are a teacher. The user will give you a transcript of a lesson and you have to summarize it for them. In your summary, you can use bullet points to make the ideas clear, understandable but still accurate.";
+    const template = "You are a teacher. The user will give you a transcript of a lesson and you have to summarize it for them. In your summary, you can use bullet points to make the ideas clear, understandable but still accurate. Do not use markdown symbols such as headers or bold, italic, underline, etc. in your response.";
     const prompt = req.body.prompt;
 
     try {
