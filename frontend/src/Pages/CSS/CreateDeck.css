@@ -1,0 +1,56 @@
+
+.CreateDeck {
+    padding: 20px;
+    margin-top: 50px;
+  }
+
+
+  
+  .deck-section {
+    margin-bottom: 50px;
+    margin-top: 50px;
+  }
+
+  .deck-name {
+    margin-top: 2%;
+    display: flex;
+  }
+  
+  .deck-name input {
+    width: 80%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 1%;
+    height: 50px;
+  }
+
+  .deck-name .btn {
+    height: 50px;
+    width: 10%;
+  }
+  
+  .upload-options {
+    margin-top: 10px;
+  }
+  
+  .upload-options .btn {
+    margin-right: 10px;
+  }
+  
+  .btn-primary {
+    background-color: #f78888;
+    border-color: #f78888;
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #e57070;
+    border-color: #e57070;
+  }
+  
+  .input-file {
+    display: none;
+  }
+  
