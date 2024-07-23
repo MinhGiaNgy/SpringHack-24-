@@ -7,6 +7,7 @@ import Transcript from './Pages/Transcript';
 import Landing from './Pages/Landing';
 import Navbar1 from './Component/Navbar1/NavBar'
 
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateDeck from './Pages/CreateDeck';
 

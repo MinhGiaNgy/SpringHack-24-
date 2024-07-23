@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100px;
+    width: 250px;
 }
 
 .file-input {
@@ -29,6 +31,6 @@
 .upload-button {
     width: 40%;
     border-radius: 20px;
-    height: 30px;
+    height: 50%;
     background-color: #f78888;
 }

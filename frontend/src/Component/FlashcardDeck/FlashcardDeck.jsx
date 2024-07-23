@@ -29,18 +29,10 @@ const FlashcardDeck = ({ flashcards }) => {
             <div className={`flip-card ${isFlipped ? 'flipped' : ''}`} onClick={handleFlip}>
                 <div className="flip-card-inner">
                     <div className="flip-card-front">
-                        <Card className="m-2" style={{ width: '18rem' }}>
-                            <CardBody className="d-flex flex-column align-items-center">
-                                <CardTitle tag="h5">{flashcards[currentIndex].question}</CardTitle>
-                            </CardBody>
-                        </Card>
+                        <CardTitle tag="h5">{flashcards[currentIndex].question}</CardTitle>
                     </div>
                     <div className="flip-card-back">
-                        <Card className="m-2" style={{ width: '18rem' }}>
-                            <CardBody className="d-flex flex-column align-items-center">
-                                <CardText>{flashcards[currentIndex].answer}</CardText>
-                            </CardBody>
-                        </Card>
+                        <CardText>{flashcards[currentIndex].answer}</CardText>
                     </div>
                 </div>
             </div>
