@@ -1,13 +1,13 @@
-import React from 'react';
-import './CSS/Signup.css'; 
+import React, { useState } from 'react';
+import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap';
+import './CSS/Signup.css';
 
-export default function Signup() {
-
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [role, setRole] = React.useState('user'); 
+const Signup = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('user');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,29 +18,70 @@ export default function Signup() {
       password,
       role
     });
+    // Reset the form fields after submission
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
   };
 
   return (
-    <div className='container-fluid vh-100 d-flex justify-content-center align-items-center' style={{ backgroundColor: '#f1f1f1' }}>
-      <div className='signup-container'>
-        <div className='col-md-6 signup-left'>
-          <h2>Create new</h2>
-          <h2>Account</h2>
-          <h3>Already have an account? <a className='signup-login' href='login'>Log In</a></h3>
-        </div>
-        <div className='col-md-6 signup-right'>
-          <form onSubmit={handleSubmit}>f
-            <div className='signup-info'>
-              <input type='text' className='form-control mb-3' placeholder='First Name' value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-              <input type='text' className='form-control mb-3' placeholder='Last Name' value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-              <input type='email' className='form-control mb-3' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <input type='password' className='form-control mb-3' placeholder='Password' value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <input type='hidden' name='role' value={role} />
+    <div className="signup-page">
+      <Container>
+        <Row className="justify-content-center align-items-center vh-100">
+          <Col md="6" className="signup-left text-center">
+            <h1>Create new Account</h1>
+            <h3>Already have an account? <a className="signup-login" href="/login">Log In</a></h3>
+          </Col>
+          <Col md="6">
+            <div className="signup-form">
+              <h1 className="text-center mb-4">Sign Up</h1>
+              <Form onSubmit={handleSubmit}>
+                <FormGroup>
+                  <Input
+                    type="text"
+                    placeholder="First Name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    type="text"
+                    placeholder="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <Input type="hidden" name="role" value={role} />
+                <Button type="submit" color="primary" block>Sign Up</Button>
+              </Form>
             </div>
-            <button type='submit' className='btn btn-primary w-100'>Sign Up</button>
-          </form>
-        </div>
-      </div>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
-}
+};
+
+export default Signup;

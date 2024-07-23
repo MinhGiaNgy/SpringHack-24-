@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CSS/Login.css'; // Import your custom CSS for additional styling
+import './CSS/Login.css'; 
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -7,18 +7,18 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Perform form submission logic here, e.g., API call or validation
+    
     console.log({
       email,
       password
     });
-    // Reset the form fields after submission
+    
     setEmail('');
     setPassword('');
   };
 
   return (
-    <div className='container-fluid vh-100 d-flex justify-content-center align-items-center' style={{ backgroundColor: '#f1f1f1' }}>
+    <div className='container-fluid p-0' style={{ backgroundColor: '#f1f1f1' }}>
       <div className='login-container'>
         <div className='col-md-6 login-left'>
           <h2>Log in to</h2>
