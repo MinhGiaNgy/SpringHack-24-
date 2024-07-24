@@ -12,11 +12,11 @@ export default function Features() {
                 </div>
                 <div className="feature">
                     <h3>Generate flashcards</h3>
-                    <p>AI generated flashcards based on your notes</p>
+                    <p>AI-generated flashcards based on your notes</p>
                 </div>
                 <div className="feature">
-                    <h3>Generate Illustrations</h3>
-                    <p>AI generated illustrations for your notes</p>
+                    <h3>Practice with friends</h3>
+                    <p>Share your deck with classmates and ace your class</p>
                 </div>
             </div>
             <div className="feature-container"></div> {/* Ensure space below feature boxes */}

@@ -264,7 +264,7 @@ export default function Transcript() {
             {!loading && !error && transcripts.length === 0 && <div>No transcripts available.</div>}
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
               {!loading && !error && transcripts.length > 0 && transcripts.map((transcript) => (
-                <div className="col d-flex">
+                <div className="col d-flex" key={transcript._id} >
                   <div 
                     key={transcript._id} 
                     className="transcript-item card mb-3 p-3 d-flex flex-column" 
@@ -323,12 +323,14 @@ export default function Transcript() {
                         onChange={handleChange}
                       />
                     </Form.Group>
-                    <Button variant="secondary" onClick={handleCancelEdit} className="me-2 mt-2">
-                      Cancel
-                    </Button>
-                    <Button variant="primary" type="submit" disabled={!hasChanges} className="mt-2">
-                      Save
-                    </Button>
+                    <div className="d-flex justify-content-end">
+                      <Button variant="secondary" onClick={handleCancelEdit} className="me-2 mt-2">
+                        Cancel
+                      </Button>
+                      <Button variant="primary" type="submit" disabled={!hasChanges} className="mt-2">
+                        Save
+                      </Button>
+                    </div>
                   </Form>
                 ) : (
                   <div>
@@ -399,6 +401,7 @@ export default function Transcript() {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
+                      required
                     />
                   </Form.Group>
                   <Form.Group controlId="formContent">
@@ -409,6 +412,7 @@ export default function Transcript() {
                       name="content"
                       value={formData.content}
                       onChange={handleChange}
+                      required
                     />
                   </Form.Group>
                   <Form.Group controlId="formSummary">
@@ -429,12 +433,14 @@ export default function Transcript() {
                       onChange={handleFileChange}
                     />
                   </Form.Group>
+                  <div className='d-flex justify-content-end'>
                   <Button variant="secondary" onClick={handleCloseCreateModal} className="me-2 mt-2">
                     Cancel
                   </Button>
                   <Button variant="primary" type="submit" className="mt-2">
                     Save
                   </Button>
+                  </div>
                 </Form>
               </Modal.Body>
             </Modal>

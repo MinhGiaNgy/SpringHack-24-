@@ -5,6 +5,7 @@ import Signup from './Pages/Signup';
 import DeckPage from './Pages/DeckPage';
 import Transcript from './Pages/Transcript';
 import Landing from './Pages/Landing';
+import Deck from './Pages/Deck'
 import Navbar1 from './Component/Navbar1/NavBar'
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -23,6 +24,7 @@ function App() {
         <Route path='/deckpage' element={<DeckPage/>}/>
         <Route path='/transcript' element={<Transcript/>}/>
         <Route path='/createdeck' element={<CreateDeck/>}/>
+        <Route path='/deck' element={<Deck/>}/>
       </Routes>
       </BrowserRouter>
     </div>

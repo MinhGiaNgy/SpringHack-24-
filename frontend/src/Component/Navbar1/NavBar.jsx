@@ -13,8 +13,9 @@ export default function Navbar() {
 
         <ul className='nav-menu'>
             <li onClick={()=>{setMenu("home")}}><Link style={{textDecoration: 'none'}} to='/'>Home{menu==="home" ? <hr/> : <></>}</Link></li>
-            <li onClick={()=>{setMenu("flashcard")}}><Link style={{textDecoration: 'none'}} to='/deckpage'>Flashcard{menu==="flashcard" ? <hr/> : <></>}</Link></li>
-            <li onClick={()=>{setMenu("transcript")}}><Link style={{textDecoration: 'none'}} to='/transcript'>Files{menu==="transcript" ? <hr/> : <></>}</Link></li>
+            <li onClick={()=>{setMenu("flashcard")}}><Link style={{textDecoration: 'none'}} to='/deckpage'>Cards{menu==="flashcard" ? <hr/> : <></>}</Link></li>
+            <li onClick={()=>{setMenu("deck")}}><Link style={{textDecoration: 'none'}} to='/deck'>Decks{menu==="deck" ? <hr/> : <></>}</Link></li>
+            <li onClick={()=>{setMenu("transcript")}}><Link style={{textDecoration: 'none'}} to='/transcript'>Transcripts{menu==="transcript" ? <hr/> : <></>}</Link></li>
         </ul>
 
         <div className='login'>

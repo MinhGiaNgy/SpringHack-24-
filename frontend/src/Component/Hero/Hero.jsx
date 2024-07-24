@@ -8,7 +8,7 @@ export default function Hero() {
                 <h1>LectureFlashMaster</h1>
                 <h2>Real-Time Lecture Summarization and Study Aid</h2>
                 <p>Save time, stay productive and study better!</p>
-                <button className="btn-primary">Try Now!</button>
+                <a href='/login' className="btn-primary" style={{ textDecoration: "none" }}>Try Now!</a>
             </div>
         </section>
     );
