@@ -19,15 +19,5 @@ const deckSchema = new Schema({
     timestamps: true
 });
 
-deckSchema.pre('remove', async function (next) {
-    try {
-        // Delete all cards associated with this deck
-        await Card.deleteMany({ _id: { $in: this.cards } });
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
 const Deck = model('Deck', deckSchema);
 module.exports = Deck;

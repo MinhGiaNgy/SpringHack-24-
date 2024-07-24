@@ -69,7 +69,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
       if (!multicard) return res.status(404).json({ error: 'Multicard not found' });
       if (multicard.user.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
   
-      await multicard.remove();
+      await Multicard.deleteOne({ _id: req.params.id });
       res.json({ message: 'Multicard deleted' });
     } catch (error) {
       res.status(500).json({ error: error.message });

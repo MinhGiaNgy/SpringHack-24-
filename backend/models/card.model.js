@@ -11,7 +11,7 @@ const cardSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        
     },
     type: {
         type: String,
@@ -23,13 +23,13 @@ const cardSchema = new Schema({
     discriminatorKey: 'type'
 });
 
-// Middleware to update the associated deck when a card is removed
-cardSchema.pre('remove', async function (next) {
+// Middleware to update the associated deck when a card is deleted
+cardSchema.post('deleteOne', { document: true, query: false }, async function (doc, next) {
     try {
         // Remove this card's ID from the associated deck's cards array
         await Deck.findByIdAndUpdate(
-            this.deck,
-            { $pull: { cards: this._id } }
+        doc.deck,
+        { $pull: { cards: doc._id } }
         );
         next();
     } catch (error) {

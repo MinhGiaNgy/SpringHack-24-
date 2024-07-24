@@ -66,7 +66,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
       if (!flashcard) return res.status(404).json({ error: 'Flashcard not found' });
       if (flashcard.user.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
   
-      await flashcard.remove();
+      await Flashcard.deleteOne({ _id: req.params.id });
       res.json({ message: 'Flashcard deleted' });
     } catch (error) {
       res.status(500).json({ error: error.message });

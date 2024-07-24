@@ -100,8 +100,18 @@ router.delete('/:id', async (req, res) => {
         if (!card) return res.status(404).json({ error: 'Card not found' });
         if (card.user.toString() !== req.user.id) return res.status(403).json({ error: 'Unauthorized' });
 
-        await card.remove();
+        await Card.deleteOne({ _id: req.params.id });
         res.json({ message: 'Card deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Query cards by deck ID
+router.post('/:id', async (req, res) => {
+    try {
+        const cards = await Card.find({ deck: req.params.id });
+        res.json(cards);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
