@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from 'axios';
 import './CSS/Login.css'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); // Use useNavigate for redirection
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +23,9 @@ const Login = () => {
         setEmail('');
         setPassword('');
         setError(null); // Clear any previous errors
+
+        // Redirect to home page after successful login
+        navigate('/');
       } else {
         throw new Error('Login failed');
       }

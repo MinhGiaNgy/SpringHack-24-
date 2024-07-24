@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios
-import { Container, Row, Col, Form, FormGroup, Input, Button } from 'reactstrap';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axios from 'axios';
+import { Container, Row, Col, Form, FormGroup, Input, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import './CSS/Signup.css';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('USER'); // Assuming default role is USER
+  const [role, setRole] = useState('USER');
   const [error, setError] = useState(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const navigate = useNavigate(); // Use useNavigate for redirection
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +21,7 @@ const Signup = () => {
     try {
       const response = await axios.post('/api/auth/signup', {
         email,
-        username: email, // Assuming username is the same as email for simplicity
+        username,
         password,
         role,
         firstName,
@@ -26,18 +30,24 @@ const Signup = () => {
 
       console.log('Signup successful:', response.data);
 
-      // Reset the form fields after successful signup
       setFirstName('');
       setLastName('');
+      setUsername('');
       setEmail('');
       setPassword('');
-      setError(null); // Clear any previous errors
+      setError(null);
+
+      setShowSuccessModal(true);
     } catch (error) {
       console.error('Signup error:', error.message);
       setError('Signup failed. Please check your details and try again.');
     }
   };
 
+  const handleModalClose = () => {
+    setShowSuccessModal(false);
+    navigate('/login'); // Redirect to login page after closing modal
+  };
   return (
     <div className="signup-page">
       <Container>
@@ -70,6 +80,15 @@ const Signup = () => {
                 </FormGroup>
                 <FormGroup>
                   <Input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <Input
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -93,6 +112,16 @@ const Signup = () => {
           </Col>
         </Row>
       </Container>
+
+      <Modal isOpen={showSuccessModal} toggle={handleModalClose}>
+        <ModalHeader toggle={handleModalClose}>Signup Successful</ModalHeader>
+        <ModalBody>
+          Your account has been created successfully! You will be redirected to the login page.
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleModalClose}>OK</Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 };
