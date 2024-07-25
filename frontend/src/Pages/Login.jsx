@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import './CSS/Login.css'; 
 
@@ -7,19 +7,18 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Use useNavigate for redirection
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
-      const response = await axios.post('/api/auth/signin', { email, password });
+      const response = await axios.post('http://localhost:5000/api/auth/signin', { email, password });
 
-      // Check for successful response
       if (response.status === 200) {
         console.log('Login successful:', response.data);
 
-        // Reset the form fields after successful login
+        localStorage.setItem('token', response.data.token);
         setEmail('');
         setPassword('');
         setError(null); // Clear any previous errors
