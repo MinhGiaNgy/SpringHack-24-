@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './CSS/Transcript.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { ReactMic } from 'react-mic';
+import { FaPlay, FaStop } from 'react-icons/fa';
 
 export default function Transcript() {
   const [transcripts, setTranscripts] = useState([]);
@@ -16,6 +18,79 @@ export default function Transcript() {
   const [formData, setFormData] = useState({ title: '', content: '', summary: '' });
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [audioLoading, setAudioLoading] = useState(false);
+  const [audioChunks, setAudioChunks] = useState([]);
+  const mediaRecorderRef = useRef(null);
+
+  const handleShowModal = () => setShowModal(true);
+  const handleCloseModal = () => {
+    setShowModal(false);
+    resetRecording();
+  };
+
+  const resetRecording = () => {
+    setRecording(false);
+    setAudioLoading(false);
+    setAudioChunks([]);
+    clearInterval(mediaRecorderRef.current?.interval);
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+
+      mediaRecorder.ondataavailable = (event) => {
+        setAudioChunks((prevChunks) => [...prevChunks, event.data]);
+      };
+
+      mediaRecorder.start();
+      setRecording(true);
+    } catch (err) {
+      console.error('Error accessing microphone', err);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+    }
+    setRecording(false);
+  };
+
+  const submitAudio = async () => {
+    setAudioLoading(true);
+    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'recording.wav');
+    const token = localStorage.getItem('token');
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/generation/transcribe', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Transcription:', response.data);
+      // Reset the state after submission
+      resetRecording();
+      setFormData({ title: '', content: response.data.response.text, summary: '' });
+      setShowCreateModal(true);
+    } catch (error) {
+      console.error('Error uploading audio:', error.response ? error.response.data : error.message);
+    }
+    setAudioLoading(false);
+    handleCloseModal();
+  };
+
+  useEffect(() => {
+    return () => clearInterval(mediaRecorderRef.current?.interval); // Clean up on unmount
+  }, []);
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -248,15 +323,25 @@ export default function Transcript() {
       <div className='row'>
         <div className='px-md-4'>
           <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-4'>
-            <h3 className='fw-bold'>Saved Transcripts</h3>
-            <button 
-              id='upload-btn' 
-              type='button' 
-              className='btn btn-primary'
-              onClick={handleShowCreateModal}
-            >
-              Create
-            </button>
+            <h3 className='fw-bold'>Your Transcripts</h3>
+            <div id='btn-group' className='d-flex'>
+              <button 
+                id='upload-btn' 
+                type='button' 
+                className='btn btn-primary'
+                onClick={handleShowCreateModal}
+              >
+                Create
+              </button>
+              <button 
+                id='record-btn' 
+                type='button' 
+                className='btn btn-primary mx-1 fw-bold'
+                onClick={handleShowModal}
+              >
+                Record
+              </button>
+            </div>
           </div>
           <div id='transcript-list' className='container'>
             {loading && <div>Loading...</div>}
@@ -358,7 +443,7 @@ export default function Transcript() {
                       Delete
                     </Button>
                     {!selectedTranscript?.summary && (
-                      <Button variant="info" onClick={handleSummarize} disabled={isSummarizing} className="me-2">
+                      <Button variant="success" onClick={handleSummarize} disabled={isSummarizing} className="me-2">
                         {isSummarizing ? (
                           <Spinner animation="border" size="sm" />
                         ) : (
@@ -442,6 +527,41 @@ export default function Transcript() {
                   </Button>
                   </div>
                 </Form>
+              </Modal.Body>
+            </Modal>
+                
+            {/* Upload audio Modal */}
+            <Modal show={showModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Recording</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <ReactMic
+                  record={recording}
+                  className="sound-wave"
+                  onStop={() => {}}
+                  strokeColor="#F78888"
+                  backgroundColor="#FFFFFF"
+                  visualizerType="sinewave"
+                />
+                {!recording && !audioLoading && (
+                  <Button variant="success" onClick={startRecording}>
+                    <FaPlay />
+                  </Button>
+                )}
+                {recording && !audioLoading && (
+                  <>
+                    <Button variant="danger" onClick={stopRecording}>
+                      <FaStop />
+                    </Button>
+                  </>
+                )}
+                {!recording && audioChunks.length > 0 && !audioLoading && (
+                  <Button variant="primary" onClick={submitAudio} className='mx-1'>
+                    Submit
+                  </Button>
+                )}
+                {audioLoading && <Spinner animation="border" />}
               </Modal.Body>
             </Modal>
           </div>

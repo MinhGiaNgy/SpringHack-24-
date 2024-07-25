@@ -107,12 +107,23 @@ router.post('/make-flashcard', async (req, res) => {
     }
 });
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+      },
+      filename: (req, file, cb) => {
+        cb(null, file.originalname);
+      }
+    }),
+    // Specify the allowed field names
+    limits: { fileSize: 5 * 1024 * 1024 },
+  }).single('file');
 
 // @route   POST /api/openai/transcribe
 // @desc    Speech to text using OpenAI API
 // @access  Private
-router.post('/transcribe', upload.single('audio'), async (req, res) => {
+router.post('/transcribe', upload, async (req, res) => {
     try {
         const audioPath = req.file.path;
 

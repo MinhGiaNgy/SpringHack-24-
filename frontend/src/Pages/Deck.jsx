@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CSS/Transcript.css'; 
+import './CSS/Deck.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 
@@ -240,7 +240,7 @@ export default function Decks() {
       <div className='row'>
         <div className='px-md-4'>
           <div className='d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-4'>
-            <h3 className='fw-bold'>Flashcard Decks</h3>
+            <h3 className='fw-bold'>Your Decks</h3>
             <button 
               id='upload-btn' 
               type='button' 

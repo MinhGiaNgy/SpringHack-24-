@@ -49,6 +49,11 @@
     background-color: #e57070;
     border-color: #e57070;
   }
+
+  .btn-primary:disabled {
+    background-color: #f39595;
+    border-color: #f39595;
+  }
   
   .input-file {
     display: none;
