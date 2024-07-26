@@ -3,7 +3,7 @@ import axios from 'axios';
 import './CSS/Transcript.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
-import { ReactMic } from 'react-mic';
+import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
 import { FaPlay, FaStop } from 'react-icons/fa';
 
 export default function Transcript() {
@@ -20,51 +20,15 @@ export default function Transcript() {
   const [isSummarizing, setIsSummarizing] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
-  const [recording, setRecording] = useState(false);
   const [audioLoading, setAudioLoading] = useState(false);
-  const [audioChunks, setAudioChunks] = useState([]);
-  const mediaRecorderRef = useRef(null);
+  const recorderControls = useAudioRecorder();
 
   const handleShowModal = () => setShowModal(true);
-  const handleCloseModal = () => {
-    setShowModal(false);
-    resetRecording();
-  };
+  const handleCloseModal = () => setShowModal(false);
 
-  const resetRecording = () => {
-    setRecording(false);
-    setAudioLoading(false);
-    setAudioChunks([]);
-    clearInterval(mediaRecorderRef.current?.interval);
-  };
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-
-      mediaRecorder.ondataavailable = (event) => {
-        setAudioChunks((prevChunks) => [...prevChunks, event.data]);
-      };
-
-      mediaRecorder.start();
-      setRecording(true);
-    } catch (err) {
-      console.error('Error accessing microphone', err);
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.stop();
-    }
-    setRecording(false);
-  };
-
-  const submitAudio = async () => {
+  const submitAudio = async (audioBlob) => {
+    // const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
     setAudioLoading(true);
-    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
     const formData = new FormData();
     formData.append('file', audioBlob, 'recording.wav');
     const token = localStorage.getItem('token');
@@ -76,22 +40,14 @@ export default function Transcript() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Transcription:', response.data);
-      // Reset the state after submission
-      resetRecording();
+      console.log('Transcription:', response.data)      // Reset the state after submission
       setFormData({ title: '', content: response.data.response.text, summary: '' });
       setShowCreateModal(true);
     } catch (error) {
-      console.error('Error uploading audio:', error.response ? error.response.data : error.message);
-    }
-    setAudioLoading(false);
+      console.error('Error uploading audio:', error.response ? error.response.data : error.message);    }
     handleCloseModal();
+    setAudioLoading(false);
   };
-
-  useEffect(() => {
-    return () => clearInterval(mediaRecorderRef.current?.interval); // Clean up on unmount
-  }, []);
-
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setIsEditing(false);
@@ -536,27 +492,36 @@ export default function Transcript() {
                 <Modal.Title>Recording</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <ReactMic
+                {/* <ReactMic
                   record={recording}
                   className="sound-wave"
                   onStop={() => {}}
                   strokeColor="#F78888"
                   backgroundColor="#FFFFFF"
                   visualizerType="sinewave"
+                /> */}
+                <AudioRecorder 
+                  onRecordingComplete={submitAudio}
+                  audioTrackConstraints={{
+                    noiseSuppression: true,
+                    echoCancellation: true,
+                  }}
+                  showVisualizer={true}
+                  recorderControls={recorderControls}
                 />
-                {!recording && !audioLoading && (
-                  <Button variant="success" onClick={startRecording}>
+                {(!recorderControls.isRecording || recorderControls.isPaused) && !audioLoading && (
+                  <Button variant="success" onClick={recorderControls.startRecording}>
                     <FaPlay />
                   </Button>
                 )}
-                {recording && !audioLoading && (
+                {recorderControls.isPaused && !audioLoading && (
                   <>
-                    <Button variant="danger" onClick={stopRecording}>
+                    <Button variant="danger" onClick={recorderControls.togglePauseResume}>
                       <FaStop />
                     </Button>
                   </>
                 )}
-                {!recording && audioChunks.length > 0 && !audioLoading && (
+                {recorderControls.isPaused && recorderControls.recordingTime > 0 && !audioLoading && (
                   <Button variant="primary" onClick={submitAudio} className='mx-1'>
                     Submit
                   </Button>
