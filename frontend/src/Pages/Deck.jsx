@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './CSS/Deck.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 
 export default function Decks() {
   const [decks, setDecks] = useState([]);
@@ -40,8 +40,6 @@ export default function Decks() {
     setShowCreateModal(false);
     setFormData({ name: '', cards: [{ term: '', definition: '' }] });
   };
-
-  const handleEdit = () => setIsEditing(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +117,7 @@ export default function Decks() {
       const deckId = deckResponse.data._id;
 
       // Step 2: Create each card associated with the deck
-      const createCardPromises = formData.cards.map((card) => {
+      const createCardPromises = formData.cards.forEach((card) => {
         console.log(card);
         console.log(deckId);
         axios.post(
@@ -132,13 +130,18 @@ export default function Decks() {
             }
           }
         )
-    }
-      );
+      });
 
       // Wait for all card creation requests to complete
-      await Promise.all(createCardPromises);
-
-      console.log('Deck and cards created successfully');
+      Promise.all(createCardPromises)
+      .then((responses) => {
+        console.log('All cards created successfully:', responses);
+        // Handle successful creation of all cards
+      })
+      .catch((error) => {
+        console.error('Error creating some cards:', error);
+        // Handle errors for card creation
+      });
 
       // Optionally, you can fetch the newly created deck with its cards to update the state
       const updatedDeckResponse = await axios.get(

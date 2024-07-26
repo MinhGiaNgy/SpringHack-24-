@@ -8,7 +8,6 @@ const CreateDeck = () => {
   const [deckName, setDeckName] = useState('');
   const [flashcards, setFlashcards] = useState([]);
   const [transcripts, setTranscripts] = useState([]);
-  const [selectedTranscript, setSelectedTranscript] = useState(null);
   const [modal, setModal] = useState(false);
   const fileInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -145,7 +144,6 @@ const CreateDeck = () => {
   };
 
   const handleTranscriptSelect = async (transcript) => {
-    setSelectedTranscript(transcript);
     setModal(false);
 
     try {

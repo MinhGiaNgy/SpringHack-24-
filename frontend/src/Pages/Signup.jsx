@@ -10,7 +10,6 @@ const Signup = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('USER');
   const [error, setError] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate(); // Use useNavigate for redirection
@@ -23,7 +22,7 @@ const Signup = () => {
         email,
         username,
         password,
-        role,
+        role: "USER",
         firstName,
         lastName,
       });

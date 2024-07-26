@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
+import { CardTitle, CardText, Button } from 'reactstrap';
 import './FlashcardDeck.css';
 
 const FlashcardDeck = ({ flashcards }) => {
