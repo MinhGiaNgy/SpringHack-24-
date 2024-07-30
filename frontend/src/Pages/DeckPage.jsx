@@ -1,56 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileUpload from '../Component/FileUpload/FileUpload';
 import FlashcardDeck from '../Component/FlashcardDeck/FlashcardDeck';
 import AddEditFlashcard from '../Component/AddEditFlashcard/AddEditFlashcard';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import './CSS/DeckPage.css';
-import { Link, useParams, useHistory } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
 const DeckPage = () => {
-  const { deckId } = useParams(); 
-  const history = useHistory();
   const [flashcards, setFlashcards] = useState([]);
-  const [newCard, setNewCard] = useState(''); 
+  const [newCard, setNewCard] = useState(null);
 
   useEffect(() => {
-    axios.post(`/api/cards/${deckId}`) 
-      .then(response => {
+    // Fetch cards from backend
+    const fetchCards = async () => {
+      try {
+        const response = await axios.post('/api/cards/<deck-id>'); // Replace <deck-id> with actual deck id
         setFlashcards(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching cards:', error);
-      });
-  }, [deckId]);
+      }
+    };
+    fetchCards();
+  }, []);
 
-  const handleSaveFlashcard = (flashcard) => {
-    axios.post('/api/cards', { deckId, content: flashcard }) 
-    .then(response => {
-    setFlashcards([...flashcards, response.data]);
-    })
-    .catch(error => {
-      console.error('Error adding card:', error);
-    }); 
+  const handleSaveFlashcard = async (flashcard) => {
+    try {
+      const response = await axios.post('/api/cards', flashcard);
+      setFlashcards([...flashcards, response.data]);
+    } catch (error) {
+      console.error('Error saving flashcard:', error);
+    }
   };
 
-const handleDeleteCard = (cardId) => {
-    axios.delete(`/api/cards/${cardId}`) 
-      .then(() => {
-        setFlashcards(flashcards.filter(card => card.id !== cardId));
-      })
-      .catch(error => {
-        console.error('Error deleting card:', error);
-      });
-  };
-
-const handleDeckClick = (deckId) => {
-    history.push(`/cards/${deckId}`); 
+  const handleDeleteCard = async (cardId) => {
+    try {
+      await axios.delete(`/api/cards/${cardId}`);
+      setFlashcards(flashcards.filter(card => card.id !== cardId));
+    } catch (error) {
+      console.error('Error deleting card:', error);
+    }
   };
 
 const handleUploadFlashcards = (newFlashcards) => {
     setFlashcards([...flashcards, ...newFlashcards]);
   };
+
+  useEffect(() => {
+    const deckId = 'your-deck-id';
+    fetchCards(deckId);
+  }, []);
 
   return (
     <div className="deck-page">
@@ -69,13 +69,6 @@ const handleUploadFlashcards = (newFlashcards) => {
             <CardBody>
               <CardTitle tag="h5">Add Flashcard</CardTitle>
               <AddEditFlashcard onSave={handleSaveFlashcard} />
-              <input 
-                type="text" 
-                value={newCard} 
-                onChange={e => setNewCard(e.target.value)} 
-                placeholder="New card content" 
-              />
-             <button onClick={handleSaveFlashcard}>Add Card</button> 
             </CardBody>
           </Card>
         </div>
