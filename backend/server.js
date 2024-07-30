@@ -1,14 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const deckRouter = require('./routes/deckrouter');
-const cardRouter = require('./routes/cards')
-const multicardRouter = require('./routes/MultichoiceRouter'); 
-const flashcardRouter = require('./routes/Flashcardrouter'); 
-const authRouter = require('./routes/authentication'); 
-const transcriptRouter = require('./routes/transcripts'); 
-const generation = require('./routes/generation');
 const authMiddleware = require('./middleware/auth');
+const { swaggerUi, swaggerDocument } = require('./swagger');
 
 require('dotenv').config();
 
@@ -19,14 +13,14 @@ app.use(express.json());
 const port = process.env.PORT;
 const uri = process.env.ATLAS_URI;
 
-app.use('/api/decks', authMiddleware, deckRouter);
-app.use('/api/cards', authMiddleware, cardRouter);
-app.use('/api/multicards', authMiddleware, multicardRouter); 
-app.use('/api/flashcards', authMiddleware, flashcardRouter); 
-app.use('/api/auth', authRouter); 
-app.use('/api/transcripts', authMiddleware, transcriptRouter); 
-
-app.use('/api/generation', authMiddleware, generation);
+app.use('/api/decks', authMiddleware, require('./routes/decks'));
+app.use('/api/cards', authMiddleware, require('./routes/cards'));
+app.use('/api/multicards', authMiddleware, require('./routes/multicards')); 
+app.use('/api/flashcards', authMiddleware, require('./routes/flashcards')); 
+app.use('/api/auth', require('./routes/authentication')); 
+app.use('/api/transcripts', authMiddleware, require('./routes/transcripts')); 
+app.use('/api/generation', authMiddleware, require('./routes/generation'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 mongoose
     .connect(uri, { })

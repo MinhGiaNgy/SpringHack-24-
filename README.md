@@ -22,6 +22,7 @@ A teaching app built using MERNstack
 - **Mongoose**: ODM for MongoDB
 - **JWT**: JSON Web Tokens for authentication
 - **Bootstrap CSS**: CSS frameworks for styling (if used)
+- **Swagger**: Documenting API routes
 
 ## Installation
 
@@ -38,8 +39,7 @@ A teaching app built using MERNstack
 
      ```bash
      cd backend/
-     npm install express cors dotenv jsonwebtoken bcryptjs axios mongoose
-     npm install --save-dev nodemon
+     npm install
      ```
 
 3. **Set up environment variables**
@@ -72,14 +72,14 @@ A teaching app built using MERNstack
      npm start
      ```
 
-6. **API Documentation**
-   - APIs: http://localhost:5000
+6. **Swagger API Documentation**
+   - APIs: http://localhost:5000/api-docs
       - For decks: /api/decks
       - For cards: /api/cards
-      - For multichoice cards: /api/multicards
-      - For Flashcard: /api/flashcards
-      - For Auth: /api/auth
-      - For Transcripts: /api/transcripts
+      - For multicards: /api/multicards
+      - For flashcard: /api/flashcards
+      - For auth: /api/auth
+      - For transcripts: /api/transcripts
       - For generation: /api/generation
 
    - When a user logs in, the JWT token must be saved in local storage.
@@ -93,77 +93,6 @@ A teaching app built using MERNstack
       }
    }
    ```
-    
-   - Sample APIs
-      - Login: POST /api/auth/signin
-        
-      ```json
-      {
-         "email": "string",
-         "password": "string"
-      }
-      ```
-      - Signup: POST /api/auth/signup
-        
-      ```json
-      {
-         "email": "string",
-         "username": "string",
-         "password": "string",
-         "role": "USER",
-         "firstName": "string",
-         "lastName": "string"
-      }
-      ```
-
-      - Create card: POST /api/cards
-
-      ```json
-      {
-          "deck": "669ced1c8739729ee0e6c24c",
-          "type": "Multicard",
-          "question": "Is computer science dead?",
-          "choiceNumber": 2,
-          "choices": [
-              "True",
-              "False"
-          ]
-      }
-      ```
-
-      ```json
-      {
-          "deck": "669ced1c8739729ee0e6c24c",
-          "type": "Flashcard",
-          "term": "Apple",
-          "definition": "A tech company"
-      }
-      ```
-
-      - Create deck: POST /api/decks
-
-      ```json
-      {
-         "name": "My first deck"
-      }
-      ```
-
-      - Generate flashcards: POST /api/generation/make-flashcard
-
-      ```json
-      {
-         "num": 10,
-         "prompt": "string"
-      }
-      ```
-
-      - Summarize text: POST /api/generation/summarize
-    
-      ```json
-      {
-         "prompt": "string"
-      }
-      ```
   
 7. **Access the application**
    

@@ -5,17 +5,17 @@ const Deck = require('./deck.model');
 const cardSchema = new Schema({
     deck: {
         type: Schema.Types.ObjectId,
+        required: [true, 'Deck ID is required.'],
         ref: 'Deck',
-        required: true
     },
     user: {
         type: Schema.Types.ObjectId,
+        required: [true, 'User is required.'],
         ref: 'User',
-        
     },
     type: {
         type: String,
-        required: true,
+        required: [true, 'Card type is required.'],
         enum: ['Flashcard', 'Multicard']
     }
 }, {
@@ -23,10 +23,8 @@ const cardSchema = new Schema({
     discriminatorKey: 'type'
 });
 
-// Middleware to update the associated deck when a card is deleted
 cardSchema.post('deleteOne', { document: true, query: false }, async function (doc, next) {
     try {
-        // Remove this card's ID from the associated deck's cards array
         await Deck.findByIdAndUpdate(
         doc.deck,
         { $pull: { cards: doc._id } }
