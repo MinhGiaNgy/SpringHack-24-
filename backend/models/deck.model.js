@@ -9,6 +9,7 @@ const deckSchema = new Schema({
     },
     user: {
         type: Schema.Types.ObjectId,
+        required: [true, 'User ID is required.'],
         ref: 'User'
     },
     cards: [{
