@@ -4,7 +4,6 @@ import FlashcardDeck from '../Component/FlashcardDeck/FlashcardDeck';
 import AddEditFlashcard from '../Component/AddEditFlashcard/AddEditFlashcard';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import './CSS/DeckPage.css';
-import { Link } from 'react-router-dom';
 import { Link, useParams, useHistory } from 'react-router-dom'; 
 import axios from 'axios';
 
