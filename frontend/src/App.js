@@ -25,6 +25,7 @@ function App() {
         <Route path='/transcript' element={<Transcript/>}/>
         <Route path='/createdeck' element={<CreateDeck/>}/>
         <Route path='/deck' element={<Deck/>}/>
+        <Route path='/decks/:deckId' element={<DeckPage />} />
       </Routes>
       </BrowserRouter>
     </div>

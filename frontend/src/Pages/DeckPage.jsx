@@ -5,16 +5,51 @@ import AddEditFlashcard from '../Component/AddEditFlashcard/AddEditFlashcard';
 import { Card, CardBody, CardTitle } from 'reactstrap';
 import './CSS/DeckPage.css';
 import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom'; 
+import axios from 'axios';
 
 
 const DeckPage = () => {
+  const { deckId } = useParams(); 
+  const history = useHistory();
   const [flashcards, setFlashcards] = useState([]);
+  const [newCard, setNewCard] = useState(''); 
+
+  useEffect(() => {
+    axios.post(`/api/cards/${deckId}`) 
+      .then(response => {
+        setFlashcards(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching cards:', error);
+      });
+  }, [deckId]);
 
   const handleSaveFlashcard = (flashcard) => {
-    setFlashcards([...flashcards, flashcard]);
+    axios.post('/api/cards', { deckId, content: flashcard }) 
+    .then(response => {
+    setFlashcards([...flashcards, response.data]);
+    })
+    .catch(error => {
+      console.error('Error adding card:', error);
+    }); 
   };
 
-  const handleUploadFlashcards = (newFlashcards) => {
+const handleDeleteCard = (cardId) => {
+    axios.delete(`/api/cards/${cardId}`) 
+      .then(() => {
+        setFlashcards(flashcards.filter(card => card.id !== cardId));
+      })
+      .catch(error => {
+        console.error('Error deleting card:', error);
+      });
+  };
+
+const handleDeckClick = (deckId) => {
+    history.push(`/cards/${deckId}`); 
+  };
+
+const handleUploadFlashcards = (newFlashcards) => {
     setFlashcards([...flashcards, ...newFlashcards]);
   };
 
@@ -35,6 +70,13 @@ const DeckPage = () => {
             <CardBody>
               <CardTitle tag="h5">Add Flashcard</CardTitle>
               <AddEditFlashcard onSave={handleSaveFlashcard} />
+              <input 
+                type="text" 
+                value={newCard} 
+                onChange={e => setNewCard(e.target.value)} 
+                placeholder="New card content" 
+              />
+             <button onClick={handleSaveFlashcard}>Add Card</button> 
             </CardBody>
           </Card>
         </div>
