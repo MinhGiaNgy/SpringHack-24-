@@ -10,9 +10,6 @@ const CreateDeck = () => {
   const [transcripts, setTranscripts] = useState([]);
   const [modal, setModal] = useState(false);
   const fileInputRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [audioChunks, setAudioChunks] = useState([]);
 
   const handleDeckNameChange = (event) => {
     setDeckName(event.target.value);
@@ -41,9 +38,6 @@ const CreateDeck = () => {
     }
   };
 
-  const handleUploadFile = () => {
-    fileInputRef.current.click();
-  };
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -76,57 +70,8 @@ const CreateDeck = () => {
     }
   };
 
-  const handleRecordAudio = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      mediaRecorderRef.current.ondataavailable = handleDataAvailable;
-      mediaRecorderRef.current.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Error accessing microphone:', error);
-    }
-  };
+  
 
-  const handleStopRecording = async () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      
-      // Create a Blob from the audio chunks
-      const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-      setAudioChunks([]);
-
-      try {
-        const formData = new FormData();
-        formData.append('audio', audioBlob, 'recording.wav');
-
-        const response = await axios.post('/api/generation/make-flashcard', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        if (response.data.flashcards) {
-          console.log('Generated flashcards:', response.data);
-          setFlashcards(response.data.flashcards);
-
-          // Save generated flashcards to the database
-          await handleSaveDeck();
-        } else {
-          console.error('No flashcards generated');
-        }
-      } catch (error) {
-        console.error('Error generating flashcards from recording:', error);
-      }
-    }
-  };
-
-  const handleDataAvailable = (event) => {
-    if (event.data.size > 0) {
-      setAudioChunks([...audioChunks, event.data]);
-    }
-  };
 
   const handleSavedTranscriptClick = async () => {
     try {
@@ -178,12 +123,6 @@ const CreateDeck = () => {
           <Button color="primary" className="mr-2" onClick={handleSaveDeck}>Save Deck</Button>
         </div>
         <div className="upload-options">
-          {isRecording ? (
-            <Button color="danger" className="mr-2" onClick={handleStopRecording}>Stop Recording</Button>
-          ) : (
-            <Button color="primary" className="mr-2" onClick={handleRecordAudio}>Record Audio</Button>
-          )}
-          <Button color="primary" onClick={handleUploadFile}>Upload File</Button>
           <Button color='primary' onClick={handleSavedTranscriptClick}>Saved Transcript</Button>
           <Input type="file" innerRef={fileInputRef} onChange={handleFileChange} className="input-file" />
         </div>

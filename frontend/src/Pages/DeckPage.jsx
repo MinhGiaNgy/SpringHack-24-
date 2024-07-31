@@ -12,18 +12,14 @@ const DeckPage = () => {
   const [flashcards, setFlashcards] = useState([]);
   const [newCard, setNewCard] = useState(null);
 
-  useEffect(() => {
-    // Fetch cards from backend
-    const fetchCards = async () => {
-      try {
-        const response = await axios.post('/api/cards/<deck-id>'); // Replace <deck-id> with actual deck id
-        setFlashcards(response.data);
-      } catch (error) {
-        console.error('Error fetching cards:', error);
-      }
-    };
-    fetchCards();
-  }, []);
+  const fetchCards = async (deckId) => {
+    try {
+      const response = await axios.get(`/api/cards/${deckId}`);
+      setFlashcards(response.data);
+    } catch (error) {
+      console.error('Error fetching cards:', error);
+    }
+  };
 
   const handleSaveFlashcard = async (flashcard) => {
     try {
