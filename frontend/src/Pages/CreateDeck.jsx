@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import FlashcardDeck from '../Component/FlashcardDeck/FlashcardDeck';
-import { Button, Container, Input, Modal, ModalHeader, ModalBody, ModalFooter, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, Container, Input, Modal, ModalHeader, ModalBody, ModalFooter, ListGroup, ListGroupItem, Alert } from 'reactstrap';
 import './CSS/CreateDeck.css';
 
 const CreateDeck = () => {
@@ -9,7 +9,10 @@ const CreateDeck = () => {
   const [flashcards, setFlashcards] = useState([]);
   const [transcripts, setTranscripts] = useState([]);
   const [modal, setModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const fileInputRef = useRef(null);
+
+  const getAuthToken = () => localStorage.getItem('token');
 
   const handleDeckNameChange = (event) => {
     setDeckName(event.target.value);
@@ -17,27 +20,36 @@ const CreateDeck = () => {
 
   const handleSaveDeck = async () => {
     try {
-      const response = await fetch('/api/decks', {
-        method: 'POST',
+      const token = getAuthToken();
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await axios.post('http://localhost:5000/api/decks', {
+        name: deckName,
+        flashcards: flashcards,
+      }, {
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: deckName,
-          flashcards: flashcards,  // Include flashcards data in the request body
-        }),
+          'Authorization': `Bearer ${token}`
+        }
       });
 
-      if (!response.ok) {
+      if (response.status !== 201) {
         throw new Error('Failed to create deck');
       }
 
-      console.log('Deck created successfully:', deckName);
+      // Show success message
+      setSuccessMessage('Deck created successfully!');
+
+      // Reset all fields
+      setDeckName('');
+      setFlashcards([]);
+      setTranscripts([]);
+      setModal(false);
+      fileInputRef.current.value = '';  // Clear file input
+
     } catch (error) {
       console.error('Error creating deck:', error);
     }
   };
-
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -45,22 +57,23 @@ const CreateDeck = () => {
       try {
         console.log('Uploading file:', file.name);
         
-        const response = await fetch('/api/generation/make-flashcard', {
-          method: 'POST',
+        const token = getAuthToken();
+        if (!token) throw new Error('No authentication token found');
+
+        const response = await axios.post('http://localhost:5000/api/generation/make-flashcard', {
+          num: 10,
+          prompt: file.name,
+        }, {
           headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            num: 10,
-            prompt: file.name,
-          }),
+            'Authorization': `Bearer ${token}`
+          }
         });
 
-        if (!response.ok) {
+        if (response.status !== 201) {
           throw new Error('Failed to generate flashcards');
         }
 
-        const data = await response.json();
+        const data = response.data;
         console.log('Generated flashcards:', data);
         setFlashcards(data.flashcards);
 
@@ -70,12 +83,16 @@ const CreateDeck = () => {
     }
   };
 
-  
-
-
   const handleSavedTranscriptClick = async () => {
     try {
-      const response = await axios.get('/api/transcripts');
+      const token = getAuthToken();
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await axios.get('http://localhost:5000/api/transcripts', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (response.data.length === 0) {
         alert('No saved transcripts available.');
         return;
@@ -84,7 +101,7 @@ const CreateDeck = () => {
       setModal(true);
     } catch (error) {
       console.error('Error fetching transcripts:', error);
-      alert('Failed to fetch transcripts.');
+      alert(`Failed to fetch transcripts: ${error.message}`);
     }
   };
 
@@ -92,16 +109,30 @@ const CreateDeck = () => {
     setModal(false);
 
     try {
-      const response = await axios.post('/api/generation/make-flashcard', {
+      const token = getAuthToken();
+      if (!token) throw new Error('No authentication token found');
+
+      const response = await axios.get(`http://localhost:5000/api/transcripts/${transcript.id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const transcriptData = response.data;
+
+      const flashcardResponse = await axios.post('http://localhost:5000/api/generation/make-flashcard', {
         transcriptId: transcript.id,
+        transcript: transcriptData,
         num: 10,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
-      if (response.data.flashcards && response.data.flashcards.length > 0) {
-        console.log('Generated flashcards:', response.data);
-        setFlashcards(response.data.flashcards);
+      if (flashcardResponse.data.flashcards && flashcardResponse.data.flashcards.length > 0) {
+        console.log('Generated flashcards:', flashcardResponse.data);
+        setFlashcards(flashcardResponse.data.flashcards);
 
-        // Optionally save the deck if desired here
         await handleSaveDeck();
       } else {
         alert('No flashcards generated from the selected transcript.');
@@ -119,7 +150,7 @@ const CreateDeck = () => {
       <div className="deck-section">
         <h3>Deck name:</h3>
         <div className="deck-name">
-          <input type="text" className="form-control mb-2" placeholder="My Deck #1" value={deckName} onChange={handleDeckNameChange} />
+          <Input type="text" className="form-control mb-2" placeholder="My Deck #1" value={deckName} onChange={handleDeckNameChange} />
           <Button color="primary" className="mr-2" onClick={handleSaveDeck}>Save Deck</Button>
         </div>
         <div className="upload-options">
@@ -158,6 +189,13 @@ const CreateDeck = () => {
           <Button color="secondary" onClick={toggleModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
+
+      {/* Success Message */}
+      {successMessage && (
+        <Alert color="success">
+          {successMessage}
+        </Alert>
+      )}
     </Container>
   );
 };

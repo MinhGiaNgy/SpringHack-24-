@@ -14,7 +14,7 @@ const DeckPage = () => {
 
   const fetchCards = async (deckId) => {
     try {
-      const response = await axios.get(`/api/cards/${deckId}`);
+      const response = await axios.get(`http://localhost:5000//api/cards/${deckId}`);
       setFlashcards(response.data);
     } catch (error) {
       console.error('Error fetching cards:', error);

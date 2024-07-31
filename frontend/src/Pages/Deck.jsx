@@ -3,6 +3,8 @@ import axios from 'axios';
 import './CSS/Deck.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
+import { Link,  } from 'react-router-dom';
+
 
 export default function Decks() {
   const [decks, setDecks] = useState([]);
@@ -16,6 +18,7 @@ export default function Decks() {
   const [formData, setFormData] = useState({ name: '', cards: [{ term: '', definition: '' }] });
   const [showCardDefinition, setShowCardDefinition] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
 
   
 
@@ -347,11 +350,11 @@ export default function Decks() {
                     <Button variant="secondary" onClick={handleCloseEditModal} className="me-2">
                       Close
                     </Button>
-                    {/* <Button variant="primary" onClick={handleEdit} className="me-2">
-                      Edit
-                    </Button> */}
                     <Button variant="danger" onClick={handleConfirmDelete} className="me-2">
                       Delete
+                    </Button>
+                    <Button variant="primary" onClick={handleConfirmDelete} className="me-2">
+                      View
                     </Button>
                   </>
                 )}
@@ -430,6 +433,9 @@ export default function Decks() {
           </div>
         </div>
       </div>
+      <Link to='/createdeck' className="add-button">
+        <i className="bi bi-plus-lg plus-icon"></i>
+      </Link>
     </div>
   );
 }

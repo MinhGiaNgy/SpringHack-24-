@@ -9,6 +9,8 @@ const Login = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  const getAuthToken = () => localStorage.getItem('token');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
