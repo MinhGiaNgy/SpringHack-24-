@@ -3,8 +3,7 @@ import axios from 'axios';
 import './CSS/Transcript.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
-import { AudioRecorder, useAudioRecorder } from 'react-audio-voice-recorder';
-import { FaPlay, FaStop } from 'react-icons/fa';
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
 export default function Transcript() {
   const [transcripts, setTranscripts] = useState([]);
@@ -21,13 +20,11 @@ export default function Transcript() {
 
   const [showModal, setShowModal] = useState(false);
   const [audioLoading, setAudioLoading] = useState(false);
-  const recorderControls = useAudioRecorder();
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   const submitAudio = async (audioBlob) => {
-    // const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
     setAudioLoading(true);
     const formData = new FormData();
     formData.append('file', audioBlob, 'recording.wav');
@@ -40,13 +37,15 @@ export default function Transcript() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('Transcription:', response.data)      // Reset the state after submission
       setFormData({ title: '', content: response.data.response.text, summary: '' });
       setShowCreateModal(true);
     } catch (error) {
-      console.error('Error uploading audio:', error.response ? error.response.data : error.message);    }
+      console.error('Error uploading audio:', error.response ? error.response.data : error.message);    
+    }
     handleCloseModal();
     setAudioLoading(false);
+    audioBlob = null;
+    
   };
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -489,44 +488,20 @@ export default function Transcript() {
             {/* Upload audio Modal */}
             <Modal show={showModal} onHide={handleCloseModal}>
               <Modal.Header closeButton>
-                <Modal.Title>Recording</Modal.Title>
+                <Modal.Title>Record</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                {/* <ReactMic
-                  record={recording}
-                  className="sound-wave"
-                  onStop={() => {}}
-                  strokeColor="#F78888"
-                  backgroundColor="#FFFFFF"
-                  visualizerType="sinewave"
-                /> */}
-                <AudioRecorder 
-                  onRecordingComplete={submitAudio}
-                  audioTrackConstraints={{
-                    noiseSuppression: true,
-                    echoCancellation: true,
-                  }}
-                  showVisualizer={true}
-                  recorderControls={recorderControls}
-                />
-                {(!recorderControls.isRecording || recorderControls.isPaused) && !audioLoading && (
-                  <Button variant="success" onClick={recorderControls.startRecording}>
-                    <FaPlay />
-                  </Button>
-                )}
-                {recorderControls.isPaused && !audioLoading && (
-                  <>
-                    <Button variant="danger" onClick={recorderControls.togglePauseResume}>
-                      <FaStop />
-                    </Button>
-                  </>
-                )}
-                {recorderControls.isPaused && recorderControls.recordingTime > 0 && !audioLoading && (
-                  <Button variant="primary" onClick={submitAudio} className='mx-1'>
-                    Submit
-                  </Button>
-                )}
-                {audioLoading && <Spinner animation="border" />}
+                <div className="d-flex justify-content-center">
+                  <AudioRecorder 
+                    onRecordingComplete={(blob) => submitAudio(blob)}
+                    audioTrackConstraints={{
+                      noiseSuppression: true,
+                      echoCancellation: true,
+                    }}
+                    showVisualizer={true}
+                  />
+                </div>
+                {audioLoading && <div className="d-flex justify-content-center"><Spinner animation="border" /></div>}
               </Modal.Body>
             </Modal>
           </div>

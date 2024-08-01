@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './CSS/Deck.css'; 
+import './CSS/Deck.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Link,  } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 export default function Decks() {
@@ -16,11 +16,7 @@ export default function Decks() {
   const [selectedDeck, setSelectedDeck] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ name: '', cards: [{ term: '', definition: '' }] });
-  const [showCardDefinition, setShowCardDefinition] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-
-
-  
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
@@ -263,13 +259,13 @@ export default function Decks() {
             <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
               {!loading && !error && decks.length > 0 && decks.map((deck) => (
                 <div className="col d-flex" key={deck._id}>
-                  <div 
-                    className="deck-item card mb-3 p-3 d-flex flex-column" 
-                    onClick={() => handleShowEditModal(deck)}
-                    style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%' }}
-                  >
-                    <h4 style={{ textAlign: 'left' }}>{deck.name}</h4>
-                  </div>
+                    <div 
+                      className="deck-item card mb-3 p-3 d-flex flex-column" 
+                      onClick={() => handleShowEditModal(deck)}
+                      style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%' }}
+                    >
+                      <h4 style={{ textAlign: 'left' }}>{deck.name}</h4>
+                    </div>
                 </div>
               ))}
             </div>
@@ -333,16 +329,12 @@ export default function Decks() {
                     {selectedDeck?.cards.map((card, index) => (
                       <div key={index} className="mb-3">
                         <h5>{card.term}</h5>
-                        <Button variant="link" onClick={() => setShowCardDefinition(index)}>
-                          {showCardDefinition === index ? 'Hide Definition' : 'Show Definition'}
-                        </Button>
-                        {showCardDefinition === index && (
-                          <p>{card.definition}</p>
-                        )}
+                        <p>{card.definition}</p>
                       </div>
                     ))}
                   </div>
                 )}
+                {!isEditing && selectedDeck && selectedDeck.cards.length === 0 && <div className="d-flex justify-content-center">Empty deck</div>}
               </Modal.Body>
               <Modal.Footer>
                 {!isEditing && (
