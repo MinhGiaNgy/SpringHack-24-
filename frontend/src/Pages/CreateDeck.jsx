@@ -61,8 +61,8 @@ const CreateDeck = () => {
         if (!token) throw new Error('No authentication token found');
 
         const response = await axios.post('http://localhost:5000/api/generation/make-flashcard', {
-          num: 10,
-          prompt: file.name,
+          num: 5,
+          prompt: "This is a detailed transcript of the lesson...",
         }, {
           headers: {
             'Authorization': `Bearer ${token}`

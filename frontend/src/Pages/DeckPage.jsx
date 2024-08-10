@@ -14,7 +14,7 @@ const DeckPage = () => {
 
   const fetchCards = async (deckId) => {
     try {
-      const response = await axios.get(`http://localhost:5000//api/cards/${deckId}`);
+      const response = await axios.get(`http://localhost:5000/api/decks/${deckId}`);
       setFlashcards(response.data);
     } catch (error) {
       console.error('Error fetching cards:', error);
@@ -23,7 +23,7 @@ const DeckPage = () => {
 
   const handleSaveFlashcard = async (flashcard) => {
     try {
-      const response = await axios.post('/api/cards', flashcard);
+      const response = await axios.post('http://localhost:5000/api/cards', flashcard);
       setFlashcards([...flashcards, response.data]);
     } catch (error) {
       console.error('Error saving flashcard:', error);
@@ -32,7 +32,7 @@ const DeckPage = () => {
 
   const handleDeleteCard = async (cardId) => {
     try {
-      await axios.delete(`/api/cards/${cardId}`);
+      await axios.delete(`http://localhost:5000/api/cards/${cardId}`);
       setFlashcards(flashcards.filter(card => card.id !== cardId));
     } catch (error) {
       console.error('Error deleting card:', error);
