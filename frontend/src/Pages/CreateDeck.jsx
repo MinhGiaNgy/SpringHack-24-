@@ -36,10 +36,7 @@ const CreateDeck = () => {
         throw new Error('Failed to create deck');
       }
 
-      // Show success message
       setSuccessMessage('Deck created successfully!');
-
-      // Reset all fields
       setDeckName('');
       setFlashcards([]);
       setTranscripts([]);
@@ -55,27 +52,32 @@ const CreateDeck = () => {
     const file = event.target.files[0];
     if (file) {
       try {
-        console.log('Uploading file:', file.name);
-        
         const token = getAuthToken();
         if (!token) throw new Error('No authentication token found');
 
-        const response = await axios.post('http://localhost:5000/api/generation/make-flashcard', {
-          num: 5,
-          prompt: "This is a detailed transcript of the lesson...",
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const transcriptContent = e.target.result;
+
+          const response = await axios.post('http://localhost:5000/api/generation/make-flashcard', {
+            num: 5,
+            prompt: transcriptContent,
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (response.status !== 201) {
+            throw new Error('Failed to generate flashcards');
           }
-        });
 
-        if (response.status !== 201) {
-          throw new Error('Failed to generate flashcards');
-        }
+          const data = response.data;
+          console.log('Generated flashcards:', data);
+          setFlashcards(data.flashcards);
+        };
 
-        const data = response.data;
-        console.log('Generated flashcards:', data);
-        setFlashcards(data.flashcards);
+        reader.readAsText(file);  // Read the file content as text
 
       } catch (error) {
         console.error('Error generating flashcards:', error);
@@ -169,7 +171,6 @@ const CreateDeck = () => {
         )}
       </div>
 
-      {/* Modal for selecting transcripts */}
       <Modal isOpen={modal} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Select a Transcript</ModalHeader>
         <ModalBody>
@@ -190,7 +191,6 @@ const CreateDeck = () => {
         </ModalFooter>
       </Modal>
 
-      {/* Success Message */}
       {successMessage && (
         <Alert color="success">
           {successMessage}
